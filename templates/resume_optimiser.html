@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Optimizer{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --success-color: #10b981;
+        --success-hover: #059669;
+        --danger-color: #ef4444;
+        --danger-hover: #dc2626;
+        --bg-color: #f9fafb;
+        --border-color: #e5e7eb;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: #1f2937;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 700;
+    }
+
+    .form-group {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #374151;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        resize: vertical;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .file-input-container {
+        position: relative;
+        padding: 2rem;
+        border: 2px dashed var(--border-color);
+        border-radius: 0.5rem;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .file-input-container:hover {
+        border-color: var(--primary-color);
+        background-color: rgba(79, 70, 229, 0.05);
+    }
+
+    .file-input {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .file-input-label {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .submit-btn {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 2rem auto;
+        padding: 1rem 2rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .submit-btn:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+    }
+
+    .submit-btn:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .results {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        margin-top: 2rem;
+    }
+
+    .results h2 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    .comparison {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .comparison-section {
+        background: var(--bg-color);
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .comparison-section h3 {
+        color: #374151;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    pre {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    pre:hover {
+        background-color: #f3f4f6;
+    }
+
+    .download-section {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .download-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        text-decoration: none;
+    }
+
+    .download-btn:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+        color: white;
+    }
+
+    .error {
+        background-color: #fee2e2;
+        border: 1px solid #fecaca;
+        color: var(--danger-color);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+
+        .comparison {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Resume Optimizer</h1>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="job-description">Job Description</label>
+            <textarea 
+                id="job-description" 
+                name="job_description" 
+                placeholder="Paste the job description here..."
+                required
+            >{{ job_description or '' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <div class="file-input-container">
+                <input 
+                    type="file" 
+                    id="resume" 
+                    name="resume" 
+                    class="file-input"
+                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                >
+                <label for="resume" class="file-input-label">
+                    Drop your resume here or click to browse
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        Supported formats: PDF, DOCX
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <button type="submit" class="submit-btn">
+            Optimize Resume
+        </button>
+    </form>
+
+    {% if optimized_resume %}
+    <div class="results">
+        <h2>Optimization Results</h2>
+        
+        <div class="comparison">
+            
+            <div class="comparison-section">
+                <h3>Optimized Resume</h3>
+                <pre>{{ optimized_resume }}</pre>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <form action="{{ url_for('view_as_html') }}" method="post" style="display: inline;">
+                <input type="hidden" name="optimized_resume" value="{{ optimized_resume }}">
+                <button type="submit" class="download-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    View as HTML
+                </button>
+            </form>
+            <a href="{{ url_for('download_pdf', content=optimized_resume) }}" class="download-btn" style="margin-left: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                Download PDF
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const form = document.querySelector('form');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    form.addEventListener('submit', function(e) {
+        if (this.checkValidity()) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg class="spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+                Optimizing...
+            `;
+        }
+    });
+
+    // File input handler
+    const fileInput = document.querySelector('.file-input');
+    const fileLabel = document.querySelector('.file-input-label');
+    
+    fileInput.onchange = function() {
+        if (this.files[0]) {
+            fileLabel.textContent = `Selected: ${this.files[0].name}`;
+        }
+    };
+
+    // Copy functionality
+    document.querySelectorAll('pre').forEach(pre => {
+        pre.onclick = function() {
+            navigator.clipboard.writeText(this.textContent);
+            this.style.backgroundColor = '#d1fae5';
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+            }, 200);
+        };
+    });
+</script>
+
+<style>
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .spinner {
+        animation: spin 1s linear infinite;
+    }
+</style>
+{% endblock %}

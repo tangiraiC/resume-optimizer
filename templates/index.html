@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block styles %}
+<style>
+    .hero-section {
+        text-align: center;
+        padding: 60px 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 40px;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .hero-section p {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 800px;
+        margin: 0 auto 30px;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 15px 30px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 1.1rem;
+        transition: background-color 0.3s;
+    }
+
+    .cta-button:hover {
+        background-color: #0056b3;
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 20px 0;
+    }
+
+    .feature-card {
+        padding: 30px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .feature-card h3 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .feature-card p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .how-it-works {
+        margin-top: 40px;
+        padding: 40px 0;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .how-it-works h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .step {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Resume Optimizer</h1>
+    <p>Enhance your resume with AI-powered optimization to match job descriptions and improve your chances of getting noticed by ATS systems.</p>
+    <a href="{{ url_for('resume_optimiser_page') }}" class="cta-button">Start Optimizing</a>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <h3>ATS Optimization</h3>
+        <p>Our AI analyzes your resume against job descriptions to ensure it passes Applicant Tracking Systems with high scores.</p>
+    </div>
+    <div class="feature-card">
+        <h3>Keyword Matching</h3>
+        <p>Automatically identify and incorporate relevant keywords from job descriptions while maintaining your original content.</p>
+    </div>
+    <div class="feature-card">
+        <h3>Format Preservation</h3>
+        <p>Keep your resume's professional formatting while optimizing content for better visibility and ranking.</p>
+    </div>
+</div>
+
+<div class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>Upload Resume</h3>
+            <p>Upload your current resume in PDF or DOCX format.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>Add Job Description</h3>
+            <p>Paste the job description you're targeting.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>Get Results</h3>
+            <p>Receive your optimized resume ready for submission.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
