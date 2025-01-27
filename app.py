@@ -13,12 +13,16 @@ from reportlab.lib.pagesizes import A4
 # Ensure you're loading the environment variable correctly
 load_dotenv()
 
+# Get API key from environment variable
+deepseek_api_key = os.getenv('DEEPSEEK_API_KEY')
 app = Flask(__name__)
 
 # Initialize OpenAI client
+if not deepseek_api_key:
+    raise ValueError("DeepSeek API key not found in environment variables.")
 
 client = OpenAI(
-    api_key="DEEPSEEK_API_KEY",
+    api_key=deepseek_api_key,
     base_url="https://api.deepseek.com"
 )
 
