@@ -4,11 +4,14 @@ from flask import Flask, render_template, request
 from openai import APIError, OpenAI , RateLimitError
 import docx
 import os
-
+from dotenv import load_dotenv
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.pagesizes import A4
+
+# Ensure you're loading the environment variable correctly
+load_dotenv()
 
 app = Flask(__name__)
 
